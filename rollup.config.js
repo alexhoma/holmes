@@ -5,8 +5,8 @@ export default {
   plugins: [
     babel({
       babelrc: false,
-      presets: ['es2015-rollup', 'babili'],
-      plugins: ['transform-flow-strip-types'],
+      presets: ['@babel/preset-env', 'minify'],
+      plugins: ['@babel/plugin-transform-flow-strip-types'],
     }),
   ],
   output: [

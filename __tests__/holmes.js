@@ -11,7 +11,12 @@ const stub = fs.readFileSync('./__tests__/stub.html').toString();
 
 function setStub() {
   document.body.innerHTML = stub;
+  
+  // Monkey patch contenteditable since JSDom hasn't any plans to add suport for this
+  // https://github.com/jsdom/jsdom/issues/1670#issuecomment-359906348
+  document.getElementById('contenteditable').isContentEditable = true;
 }
+
 /**
  * Enter a string into this Holmes input
  * @param  {string}      text text to input
@@ -469,13 +474,10 @@ describe('Usage with instance', () => {
 
   test('starts on DOMContentLoaded', () => {
     setStub();
-
     const _h = new Holmes({
-      find: '.result'
+      find: '.result',
     });
-
     const mockStart = jest.fn();
-
     _h.start = mockStart;
 
     const DOMContentLoadedEvent = document.createEvent('Event');
@@ -753,8 +755,8 @@ describe('Usage with instance', () => {
       });
     });
   });
-  // Skipped because jsDom doesn't implement contenteditable
-  test.skip('input of a contenteditable is valid', () => {
+
+  test('input of a contenteditable is valid', () => {
     setStub();
     const _h = new Holmes({
       find: '.result',
